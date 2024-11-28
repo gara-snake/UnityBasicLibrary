@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Snake.Gara.Unity.Basic.Library
+namespace Snake.Gara.Unity.Basic.Library.Util
 {
     public class Logging : MonoBehaviour
     {
