@@ -1,0 +1,7 @@
+{
+  "name": "snake.gara.unity.basic.library",
+  "version": "0.1.0",
+  "displayName": "Gara-snakeUBL",
+  "description": "Provides standard utility functions for use with Unity",
+  "unity": "2022.3"
+}
