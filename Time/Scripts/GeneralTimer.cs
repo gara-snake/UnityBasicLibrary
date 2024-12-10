@@ -122,6 +122,15 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 			return GetElapsedTime() >= duration;
 		}
 
+		// タイマーが開始されているか
+		public bool HasStarted
+		{
+			get
+			{
+				return ElapsedMilliseconds != 0;
+			}
+		}
+
 		// タイマーの監視
 		public void Update()
 		{
