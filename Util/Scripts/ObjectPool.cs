@@ -46,6 +46,14 @@ namespace Snake.Gara.Unity.Basic.Library.Util
 			objects.Add(obj);
 		}
 
+		public void ExtinguishAll()
+		{
+			foreach (T obj in objects)
+			{
+				obj.Extinguish();
+			}
+		}
+
 		private T AddObjectToPool()
 		{
 			var newObj = GameObject.Instantiate(prefab);

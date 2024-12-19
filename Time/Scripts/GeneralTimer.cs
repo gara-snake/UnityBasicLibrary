@@ -15,6 +15,9 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 
 		public event Action<double> OnTimeReached;
 
+		// タイマーが満了したら呼び出すコールバック
+		public event Action OnComplete;
+
 		public GeneralTimer()
 		{
 			stopwatch = new Stopwatch();
@@ -116,6 +119,15 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 			}
 		}
 
+		// 残り時間を秒で返却
+		public double RemainingSeconds
+		{
+			get
+			{
+				return RemainingMilliseconds / 1000;
+			}
+		}
+
 		// 指定した時間が経過しているか
 		public bool HasElapsed()
 		{
@@ -144,8 +156,13 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 					notifiedTimes.Add(time);
 				}
 			}
+
+			if (HasElapsed())
+			{
+				OnComplete?.Invoke();
+			}
+
 		}
 
 	}
-
 }
