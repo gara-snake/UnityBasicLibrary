@@ -143,6 +143,15 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 			}
 		}
 
+		// タイマーの進捗率
+		public float Progress
+		{
+			get
+			{
+				return (float)(ElapsedMilliseconds / duration.TotalMilliseconds);
+			}
+		}
+
 		// タイマーの監視
 		public void Update()
 		{

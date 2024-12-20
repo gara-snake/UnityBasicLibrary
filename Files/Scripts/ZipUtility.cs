@@ -5,10 +5,12 @@ using UnityEngine;
 
 namespace Snake.Gara.Unity.Basic.Library.Files
 {
-	public static class ZipUtility
+	public class ZipUtility : System.IDisposable
 	{
+		private List<string> tempFiles = new List<string>();
+
 		// ファイルパスのリストを受け取り、ZIPファイルとして圧縮し、ZIPファイルのパスを返す
-		public static string CreateZipFromFiles(List<string> filePaths, string zipFilePath)
+		public string CreateZipFromFiles(List<string> filePaths, string zipFilePath)
 		{
 			if (filePaths.Count > 0)
 			{
@@ -34,6 +36,76 @@ namespace Snake.Gara.Unity.Basic.Library.Files
 				Debug.LogError("No files found to zip.");
 				return null;
 			}
+		}
+
+		// ZIPファイルから指定されたファイル名のファイルを取り出し、一時ファイルとして保存してファイルパスを返す
+		public string ExtractFileFromZip(string zipFilePath, string fileName)
+		{
+			if (File.Exists(zipFilePath))
+			{
+				using (ZipArchive zip = ZipFile.OpenRead(zipFilePath))
+				{
+					foreach (ZipArchiveEntry entry in zip.Entries)
+					{
+						if (entry.FullName == fileName)
+						{
+							string extractedFilePath = Path.Combine(Path.GetTempPath(), entry.FullName);
+							entry.ExtractToFile(extractedFilePath, true);
+							tempFiles.Add(extractedFilePath);
+							return extractedFilePath;
+						}
+					}
+				}
+
+				Debug.LogError("The file was not found in the ZIP file.");
+				return null;
+			}
+			else
+			{
+				Debug.LogError("The ZIP file was not found.");
+				return null;
+			}
+		}
+
+
+		// ZIPファイルを解凍し、ファイルパスのリストを返す
+		public List<string> ExtractZipToFiles(string zipFilePath)
+		{
+			List<string> extractedFilePaths = new List<string>();
+
+			if (File.Exists(zipFilePath))
+			{
+				using (ZipArchive zip = ZipFile.OpenRead(zipFilePath))
+				{
+					foreach (ZipArchiveEntry entry in zip.Entries)
+					{
+						string extractedFilePath = Path.Combine(Path.GetTempPath(), entry.FullName);
+						entry.ExtractToFile(extractedFilePath, true);
+						extractedFilePaths.Add(extractedFilePath);
+						tempFiles.Add(extractedFilePath);
+					}
+				}
+
+				Debug.Log("ZIP file extracted successfully: " + zipFilePath);
+				return extractedFilePaths;
+			}
+			else
+			{
+				Debug.LogError("The ZIP file was not found.");
+				return null;
+			}
+		}
+
+		public void Dispose()
+		{
+			foreach (var tempFile in tempFiles)
+			{
+				if (File.Exists(tempFile))
+				{
+					File.Delete(tempFile);
+				}
+			}
+			tempFiles.Clear();
 		}
 	}
 }
