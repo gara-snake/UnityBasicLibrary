@@ -34,7 +34,7 @@ namespace Snake.Gara.Unity.Basic.Library.Files
 		}
 
 		// Pngファイルを読み込んでテクスチャを返す
-		public Texture2D LoadTexture(string filePath)
+		public static Texture2D LoadTexture(string filePath)
 		{
 			if (File.Exists(filePath))
 			{
