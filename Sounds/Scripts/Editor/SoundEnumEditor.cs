@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -71,3 +73,5 @@ namespace Snake.Gara.Unity.Basic.Library.Sound
 	}
 
 }
+
+#endif
