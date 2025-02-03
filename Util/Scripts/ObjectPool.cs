@@ -50,7 +50,10 @@ namespace Snake.Gara.Unity.Basic.Library.Util
 		{
 			foreach (T obj in objects)
 			{
-				obj.Extinguish();
+				if (obj != null)
+				{
+					obj.Extinguish();
+				}
 			}
 		}
 

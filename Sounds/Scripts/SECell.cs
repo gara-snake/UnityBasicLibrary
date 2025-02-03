@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Snake.Gara.Unity.Basic.Library.Sound
 {
-
+	[System.Serializable]
 	public class SECell
 	{
 		public int ID;
