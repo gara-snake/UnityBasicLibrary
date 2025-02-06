@@ -34,6 +34,12 @@ namespace Snake.Gara.Unity.Basic.Library.Sound
             {
                 foreach (var asset in assets.GetSEs())
                 {
+                    if (cells.ContainsKey(asset.ID))
+                    {
+                        Debug.LogWarning("SoundEffect ID is duplicated: " + asset.ID + " " + asset.audioClip.name);
+                        continue;
+                    }
+
                     cells.Add(asset.ID, asset);
                 }
             }

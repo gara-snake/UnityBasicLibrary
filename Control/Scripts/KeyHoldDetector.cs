@@ -1,39 +1,44 @@
 using UnityEngine;
 
-public class KeyHoldDetector
+namespace Snake.Gara.Unity.Basic.Library.Control
 {
-    private float keyHoldTime = 0;
-    private float holdThreshold;
-    private KeyCode targetKey;
 
-    public KeyHoldDetector(KeyCode targetKey, float holdThreshold = 0.5f)
+    public class KeyHoldDetector
     {
-        this.targetKey = targetKey;
-        this.holdThreshold = holdThreshold;
-    }
+        private float keyHoldTime = 0;
+        private float holdThreshold;
+        private KeyCode targetKey;
 
-    public void Update()
-    {
-        if (Input.GetKey(targetKey))
+        public KeyHoldDetector(KeyCode targetKey, float holdThreshold = 0.5f)
         {
-            keyHoldTime += Time.deltaTime;
+            this.targetKey = targetKey;
+            this.holdThreshold = holdThreshold;
         }
-        else
+
+        public void Update()
         {
-            keyHoldTime = 0;
+            if (Input.GetKey(targetKey))
+            {
+                keyHoldTime += UnityEngine.Time.deltaTime;
+            }
+            else
+            {
+                keyHoldTime = 0;
+            }
+        }
+
+        public bool IsKeyHeld()
+        {
+            return keyHoldTime >= holdThreshold;
+        }
+
+        public float HoldTimeRatio
+        {
+            get
+            {
+                return keyHoldTime / holdThreshold;
+            }
         }
     }
 
-    public bool IsKeyHeld()
-    {
-        return keyHoldTime >= holdThreshold;
-    }
-
-    public float HoldTimeRatio
-    {
-        get
-        {
-            return keyHoldTime / holdThreshold;
-        }
-    }
 }
