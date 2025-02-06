@@ -33,7 +33,7 @@ namespace Snake.Gara.Unity.Basic.Library._2D
                 {
                     return 0;
                 }
-                return currentFrame + 1;
+                return currentFrame;
             }
         }
 
@@ -41,7 +41,12 @@ namespace Snake.Gara.Unity.Basic.Library._2D
         {
             get
             {
-                return currentFrame == textures.Length;
+                if (textures == null || textures.Length == 0)
+                {
+                    return true;
+                }
+
+                return currentFrame == textures.Length - 1;
             }
         }
 
@@ -106,6 +111,7 @@ namespace Snake.Gara.Unity.Basic.Library._2D
             }
 
             textures = loader.LoadTexture2D();
+
         }
 
         public void LoadAndClear(ITexture2DLoader loader)
@@ -157,12 +163,8 @@ namespace Snake.Gara.Unity.Basic.Library._2D
             }
 
             currentFrame++;
-            if (textures.Length <= currentFrame)
-            {
-                currentFrame = 0;
-            }
 
-            RawImage.texture = textures[currentFrame];
+            Refresh();
         }
 
         public void PrevFrame()
@@ -178,9 +180,20 @@ namespace Snake.Gara.Unity.Basic.Library._2D
             }
 
             currentFrame--;
+
+            Refresh();
+        }
+
+        public void Refresh()
+        {
             if (currentFrame < 0)
             {
                 currentFrame = textures.Length - 1;
+            }
+
+            if (textures.Length <= currentFrame)
+            {
+                currentFrame = 0;
             }
 
             RawImage.texture = textures[currentFrame];
