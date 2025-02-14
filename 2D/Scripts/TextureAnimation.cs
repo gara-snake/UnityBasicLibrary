@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Codice.Client.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ namespace Snake.Gara.Unity.Basic.Library._2D
     public class TextureAnimation : MonoBehaviour
     {
         public RawImage RawImage; // アニメーションを表示するRawImage
-        public float FrameRate = 10f; // アニメーションのフレームレート
+        public int FrameRate = 10; // アニメーションのフレームレート
 
         private Texture2D[] textures;
         private Coroutine coroutine;
@@ -88,7 +89,7 @@ namespace Snake.Gara.Unity.Basic.Library._2D
             isInitialized = true;
         }
 
-        public void Play(ITexture2DLoader loader)
+        public void LoadAndPlay(ITexture2DLoader loader)
         {
             if (!isInitialized)
             {
@@ -120,7 +121,7 @@ namespace Snake.Gara.Unity.Basic.Library._2D
             currentFrame = 0;
         }
 
-        public void PlayOnce(ITexture2DLoader loader, Action completeCallback = null)
+        public void LoadAndPlayOnce(ITexture2DLoader loader, Action completeCallback = null)
         {
             if (!isInitialized)
             {
@@ -130,6 +131,19 @@ namespace Snake.Gara.Unity.Basic.Library._2D
             Stop();
 
             Load(loader);
+            currentFrame = 0;
+            coroutine = StartCoroutine(AnimateTextures(completeCallback));
+        }
+
+        public void PlayOnce(Action completeCallback = null)
+        {
+            if (!isInitialized)
+            {
+                Init();
+            }
+
+            Stop();
+
             currentFrame = 0;
             coroutine = StartCoroutine(AnimateTextures(completeCallback));
         }
@@ -274,7 +288,7 @@ namespace Snake.Gara.Unity.Basic.Library._2D
                 if (!IsPlaying) yield break;
 
                 RawImage.texture = textures[currentFrame];
-                yield return new WaitForSeconds(1f / FrameRate);
+                yield return new WaitForSeconds(1f / FrameRate - UnityEngine.Time.deltaTime);
             }
 
             IsPlaying = false;

@@ -7,7 +7,7 @@ namespace Snake.Gara.Unity.Basic.Library.Util
 	public class ImageHelper
 	{
 
-		public static Texture2D FlipTexture(Texture2D original)
+		public static Texture2D FlipTextureHorizontal(Texture2D original)
 		{
 			Texture2D flipped = new Texture2D(original.width, original.height);
 
@@ -17,6 +17,24 @@ namespace Snake.Gara.Unity.Basic.Library.Util
 				for (int j = 0; j < original.height; j++)
 				{
 					flipped.SetPixel(original.width - i - 1, j, original.GetPixel(i, j));
+				}
+			}
+
+			flipped.Apply();
+
+			return flipped;
+		}
+
+		public static Texture2D FlipTextureVertical(Texture2D original)
+		{
+			Texture2D flipped = new Texture2D(original.width, original.height);
+
+			// 上下のみ反転させる
+			for (int i = 0; i < original.width; i++)
+			{
+				for (int j = 0; j < original.height; j++)
+				{
+					flipped.SetPixel(i, original.height - j - 1, original.GetPixel(i, j));
 				}
 			}
 
