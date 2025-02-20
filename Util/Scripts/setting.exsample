@@ -1,0 +1,16 @@
+{
+  "settings": [
+    {
+      "key": "key1",
+      "value": "val_001"
+    },
+    {
+      "key": "key2",
+      "value": "val_002"
+    },
+    {
+      "key": "key3",
+      "value": "val_003"
+    }
+  ]
+}
