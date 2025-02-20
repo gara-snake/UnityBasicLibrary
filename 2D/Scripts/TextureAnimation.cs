@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Codice.Client.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
