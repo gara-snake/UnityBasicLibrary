@@ -197,6 +197,23 @@ namespace Snake.Gara.Unity.Basic.Library._2D
             Refresh();
         }
 
+        public void LastFrame()
+        {
+            if (!isInitialized)
+            {
+                Init();
+            }
+
+            if (!isTextureOK())
+            {
+                return;
+            }
+
+            currentFrame = textures.Length - 1;
+
+            Refresh();
+        }
+
         public void Refresh()
         {
             if (currentFrame < 0)
