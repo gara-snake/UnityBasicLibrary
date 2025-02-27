@@ -13,7 +13,7 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 		private List<double> notificationTimes;
 		private HashSet<double> notifiedTimes;
 
-		public event Action<double> OnTimeReached;
+		public event Action<GeneralTimer, double> OnTimeReached;
 
 		// タイマーが満了したら呼び出すコールバック
 		public event Action OnComplete;
@@ -25,6 +25,14 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 			duration = TimeSpan.Zero;
 			notificationTimes = new List<double>();
 			notifiedTimes = new HashSet<double>();
+		}
+
+		public double Duration
+		{
+			get
+			{
+				return duration.TotalMilliseconds;
+			}
 		}
 
 		// 制限時間をミリ秒で設定
@@ -46,6 +54,13 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 		public void AddNotificationTime(double milliseconds)
 		{
 			notificationTimes.Add(milliseconds);
+		}
+
+		// 通知する時間をリセット
+		public void ResetNotificationTimes()
+		{
+			notificationTimes.Clear();
+			notifiedTimes.Clear();
 		}
 
 		// タイマーを開始
@@ -161,7 +176,7 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 			{
 				if (elapsedMilliseconds >= time && !notifiedTimes.Contains(time))
 				{
-					OnTimeReached?.Invoke(time);
+					OnTimeReached?.Invoke(this, time);
 					notifiedTimes.Add(time);
 				}
 			}
