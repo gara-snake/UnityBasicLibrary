@@ -74,5 +74,22 @@ namespace Snake.Gara.Unity.Basic.Library.Sound
             }
         }
 
+        public static void Play(AudioClip audioClip)
+        {
+            if (instance.objectPool == null)
+            {
+                var ses = new GameObject("SoundEffectSource");
+                var source = ses.AddComponent<SeAudioSource>();
+                source.source = ses.AddComponent<AudioSource>();
+
+                instance.objectPool = new ObjectPool<SeAudioSource>(source, 5);
+            }
+
+            if (audioClip != null)
+            {
+                instance.Play(audioClip);
+            }
+        }
+
     }
 }
