@@ -103,6 +103,8 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 			notifiedTimes.Clear();
 		}
 
+		private TimeSpan elapsedOffset = TimeSpan.Zero;
+
 		private TimeSpan GetElapsedTime()
 		{
 			if (stopwatch.IsRunning)
@@ -141,6 +143,17 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 			{
 				return RemainingMilliseconds / 1000;
 			}
+		}
+
+		public void SetRemainingMilliseconds(double milliseconds)
+		{
+			// 制限時間を更新して、経過時間をリセット
+			SetDuration(milliseconds);
+
+			stopwatch.Reset();
+			pausedTime = TimeSpan.Zero;
+
+
 		}
 
 		// 指定した時間が経過しているか
