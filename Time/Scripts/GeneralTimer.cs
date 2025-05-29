@@ -10,7 +10,7 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 		private Stopwatch stopwatch;
 		private TimeSpan pausedTime;
 		private TimeSpan duration;
-		private List<double> notificationTimes;
+		private List<double> notificationRemainingTimes;
 		private HashSet<double> notifiedTimes;
 
 		public event Action<GeneralTimer, double> OnTimeReached;
@@ -23,7 +23,7 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 			stopwatch = new Stopwatch();
 			pausedTime = TimeSpan.Zero;
 			duration = TimeSpan.Zero;
-			notificationTimes = new List<double>();
+			notificationRemainingTimes = new List<double>();
 			notifiedTimes = new HashSet<double>();
 		}
 
@@ -51,15 +51,15 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 		}
 
 		// 通知する時間を追加
-		public void AddNotificationTime(double milliseconds)
+		public void AddNotificationRemainingTime(double milliseconds)
 		{
-			notificationTimes.Add(milliseconds);
+			notificationRemainingTimes.Add(milliseconds);
 		}
 
 		// 通知する時間をリセット
-		public void ResetNotificationTimes()
+		public void ResetNotificationRemainingTimes()
 		{
-			notificationTimes.Clear();
+			notificationRemainingTimes.Clear();
 			notifiedTimes.Clear();
 		}
 
@@ -145,14 +145,27 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 			}
 		}
 
+		private bool isChanged = false;
+
+		// 残り時間を設定（ミリ秒）
 		public void SetRemainingMilliseconds(double milliseconds)
 		{
+			isChanged = true;
+
 			// 制限時間を更新して、経過時間をリセット
 			SetDuration(milliseconds);
 
+			// milliseconds以下通知はもう一度送るので、notifiedTimesから削除する
+			foreach (double time in notificationRemainingTimes)
+			{
+				if (time <= milliseconds)
+				{
+					notifiedTimes.Remove(time);
+				}
+			}
+
 			stopwatch.Reset();
 			pausedTime = TimeSpan.Zero;
-
 
 		}
 
@@ -167,7 +180,7 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 		{
 			get
 			{
-				return ElapsedMilliseconds != 0;
+				return ElapsedMilliseconds != 0 || isChanged;
 			}
 		}
 
@@ -183,11 +196,10 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 		// タイマーの監視
 		public void Update()
 		{
-			double elapsedMilliseconds = ElapsedMilliseconds;
-
-			foreach (double time in notificationTimes)
+			foreach (double time in notificationRemainingTimes)
 			{
-				if (elapsedMilliseconds >= time && !notifiedTimes.Contains(time))
+				// 残り時間がtime以下になったタイミングで通知
+				if (RemainingMilliseconds <= time && !notifiedTimes.Contains(time))
 				{
 					OnTimeReached?.Invoke(this, time);
 					notifiedTimes.Add(time);
@@ -197,6 +209,7 @@ namespace Snake.Gara.Unity.Basic.Library.Time
 			if (HasElapsed())
 			{
 				OnComplete?.Invoke();
+				running = false;
 			}
 
 		}
